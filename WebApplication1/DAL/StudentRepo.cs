@@ -1,4 +1,5 @@
 ﻿using BLL.DTO;
+using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -100,6 +101,28 @@ namespace DAL
             _context.Students.Remove(entity);
             _context.SaveChanges();
             return true;
+        }
+
+        public IEnumerable<HistoryDTO> GetAllHistory()
+        {
+            var histories = _context.History.ToList();
+
+            var historyDTOs = histories.Select(history => new HistoryDTO
+            {
+                ID = history.ID,
+                FirstName = history.FirstName,
+                LastName = history.LastName,
+                GroupID = history.GroupID,
+                ActionType = history.ActionType,
+                Date = history.Date
+            });
+
+            return historyDTOs;
+        }
+
+        public void AddStudentDB(string firstName, string lastName, int? groupID)
+        {
+            _context.Database.ExecuteSqlRaw("EXEC AddStudent @FirstName={0}, @LastName={1}, @GroupID={2}", firstName, lastName, groupID);
         }
     }
 

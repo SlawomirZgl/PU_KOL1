@@ -62,6 +62,36 @@ namespace WebApplication1
             }
             return NoContent();
         }
+
+        [HttpGet("getHistory")]
+        public ActionResult<IEnumerable<HistoryDTO>> GetHistory([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var allHistory = _studentService.GetAllHistory();
+
+            if (page < 1)
+            {
+                page = 1;
+            }
+
+            if (pageSize < 1)
+            {
+                pageSize = 10;
+            }
+
+            var paginatedHistory = allHistory
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return Ok(paginatedHistory);
+        }
+
+        [HttpPost("postProcedure")]
+        public IActionResult Post(StudentCreateDBDTO student)
+        {
+            _studentService.AddStudentDB(student.FirstName, student.LastName, student.GroupID);
+            return Ok();
+        }
     }
 
 }

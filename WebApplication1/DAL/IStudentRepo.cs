@@ -14,5 +14,9 @@ namespace DAL
         StudentDTO AddStudent(StudentCreateDTO student);
         StudentDTO UpdateStudent(int id, StudentUpdateDTO student);
         bool DeleteStudent(int id);
+
+        IEnumerable<HistoryDTO> GetAllHistory();
+
+        void AddStudentDB(string firstName, string lastName, int? groupID);
     }
 }
