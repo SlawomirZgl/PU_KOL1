@@ -15,8 +15,9 @@ namespace DAL
         StudentDTO UpdateStudent(int id, StudentUpdateDTO student);
         bool DeleteStudent(int id);
 
-        IEnumerable<HistoryDTO> GetAllHistory();
 
+        IEnumerable<HistoryDTO> GetAllHistory();
+        IEnumerable<HistoryDTO> GetPagedHistory(int pageNumber, int pageSize);
         void AddStudentDB(string firstName, string lastName, int? groupID);
     }
 }

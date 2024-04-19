@@ -124,6 +124,25 @@ namespace DAL
         {
             _context.Database.ExecuteSqlRaw("EXEC AddStudent @FirstName={0}, @LastName={1}, @GroupID={2}", firstName, lastName, groupID);
         }
+
+        public IEnumerable<HistoryDTO> GetPagedHistory(int pageNumber, int pageSize)
+        {
+            var histories = _context.History
+                .FromSqlRaw("EXEC GetPagedHistory @PageNumber={0}, @PageSize={1}", pageNumber, pageSize)
+                .ToList();
+
+            var historyDTOs = histories.Select(history => new HistoryDTO
+            {
+                ID = history.ID,
+                FirstName = history.FirstName,
+                LastName = history.LastName,
+                GroupID = history.GroupID,
+                ActionType = history.ActionType,
+                Date = history.Date
+            });
+
+            return historyDTOs;
+        }
     }
 
 }

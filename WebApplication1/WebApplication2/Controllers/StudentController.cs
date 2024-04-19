@@ -10,10 +10,12 @@ namespace WebApplication1
     public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
+        private readonly IHistoryService _historyService;
 
-        public StudentController(IStudentService studentService)
+        public StudentController(IStudentService studentService, IHistoryService historyService)
         {
             _studentService = studentService;
+            _historyService = historyService;
         }
 
         [HttpGet("{id}")]
@@ -63,10 +65,18 @@ namespace WebApplication1
             return NoContent();
         }
 
+        
+        [HttpPost("postProcedure")]
+        public IActionResult Post(StudentCreateDBDTO student)
+        {
+            _studentService.AddStudentDB(student.FirstName, student.LastName, student.GroupID);
+            return Ok();
+        }
+
         [HttpGet("getHistory")]
         public ActionResult<IEnumerable<HistoryDTO>> GetHistory([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var allHistory = _studentService.GetAllHistory();
+            var allHistory = _historyService.GetAllHistory();
 
             if (page < 1)
             {
@@ -86,11 +96,11 @@ namespace WebApplication1
             return Ok(paginatedHistory);
         }
 
-        [HttpPost("postProcedure")]
-        public IActionResult Post(StudentCreateDBDTO student)
+        [HttpGet("getPagedHistory")]
+        public IActionResult GetPagedHistory(int pageNumber, int pageSize)
         {
-            _studentService.AddStudentDB(student.FirstName, student.LastName, student.GroupID);
-            return Ok();
+            var pagedHistory = _historyService.GetPagedHistory(pageNumber, pageSize);
+            return Ok(pagedHistory);
         }
     }
 

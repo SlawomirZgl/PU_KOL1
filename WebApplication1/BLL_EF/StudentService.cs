@@ -37,10 +37,6 @@ namespace BLL_EF
         {
             return _studentRepo.DeleteStudent(id);
         }
-        public IEnumerable<HistoryDTO> GetAllHistory()
-        {
-            return _studentRepo.GetAllHistory();
-        }
 
         public void AddStudentDB(string firstName, string lastName, int? groupID)
         {
